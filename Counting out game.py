@@ -74,6 +74,7 @@ class CountingOutGame:
 
             # Display the eliminate button
             self.eliminate_button.pack()
+            self.spacer.pack()
 
             # Create player labels and display them
             for i in range(n):
@@ -97,6 +98,10 @@ class CountingOutGame:
             for player in self.players:
                 player.pack_forget()
 
+            # Destroy eliminate button
+            self.eliminate_button.pack_forget()
+            self.spacer.forget()
+
             # Display labels, entry fields, and start button
             # Reset players list and entry labels
             self.players = []
@@ -108,9 +113,6 @@ class CountingOutGame:
             self.entry_K.delete(0, 'end')
             self.spacer.pack()
             self.start_button.pack()
-
-            # Destroy eliminate button
-            self.eliminate_button.pack_forget()
 
             # Destroy the info_window
             if self.info_window:
