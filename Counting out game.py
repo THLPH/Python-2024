@@ -45,16 +45,28 @@ class CountingOutGame:
         # Create info_window so it can be manipulated later
         self.info_window = None
 
+        # Create idx and k so it can be used in both method
+        self.idx = 0
+        self.k = 0
+
     def start_game(self):
         try:
             # Get values of N and K from entry fields
             n = int(self.N.get())
             k = int(self.K.get())
+            # Update the self k value
+            self.k = int(self.K.get())
+            
             # Validate input values
             if not (1 < n < 12 and k >= 1):
                 messagebox.showinfo("Invalid Input", "Please enter valid values for N and K.")
                 return
-
+                
+            # This ensures the algo doesn't count k + 1
+            # And set idx to = to k
+            self.k -= 1
+            self.idx = self.k
+            
             # Hide labels, entry fields, and start button
             self.label_N.pack_forget()
             self.entry_N.pack_forget()
@@ -78,7 +90,7 @@ class CountingOutGame:
 
             # Create player labels and display them
             for i in range(n):
-                player_label = Label(self.root, text=str(i), bg="black", fg="white", pady=1,
+                player_label = Label(self.root, text=str(i), bg="black", fg="white", pady=1, padx=10, borderwidth= 3,
                                      relief="ridge", font=("Comic Sans MS", 16))
                 player_label.pack()
                 self.players.append(player_label)
@@ -92,7 +104,7 @@ class CountingOutGame:
 
     def eliminate_player(self):
         if len(self.players) <= 2:
-            winner = self.players[0].cget("text")
+            winner = self.players[1].cget("text")
             messagebox.showinfo("Game Over", f"The winner is Player {winner}!")
             # Hide player labels
             for player in self.players:
@@ -120,8 +132,8 @@ class CountingOutGame:
             return
 
         # Remove player label based on the elimination rule
-        k = int(self.K.get())
-        eliminated = self.players.pop((k - 1) % len(self.players))
+        eliminated = self.players.pop(self.idx % len(self.players))
+        self.idx = (self.idx + self.k ) % len(self.players)
         eliminated.pack_forget()
         # Display elimination message in the game information text widget
         # Increment round
